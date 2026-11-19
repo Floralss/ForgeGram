@@ -4,5 +4,270 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ForgeGram — Мессенджер нового уровня</title>
-    <!-- truncated for this simulation, but in real it would be full -->
+    <meta name="description" content="ForgeGram — крутой мессенджер, вдохновлённый Telegram. Быстрый, безопасный, стильный.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        :root {
+            --bg-dark: #0b141a;
+            --bg-card: #17212b;
+            --accent: #2AABEE;
+            --accent-glow: #00c2ff;
+            --text: #ffffff;
+            --text-muted: #8b9bab;
+            --neon: 0 0 20px rgba(42, 171, 238, 0.6), 0 0 40px rgba(42, 171, 238, 0.3);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        .bg-particles {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(42, 171, 238, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(0, 194, 255, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(10, 20, 30, 1) 0%, var(--bg-dark) 100%);
+        }
+        .container {
+            position: relative; z-index: 1;
+            max-width: 1100px; margin: 0 auto; padding: 40px 24px;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+        }
+        header {
+            width: 100%; display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 60px; padding: 12px 0;
+        }
+        .logo-small {
+            display: flex; align-items: center; gap: 12px;
+            font-weight: 700; font-size: 1.25rem; letter-spacing: -0.02em;
+        }
+        .logo-small img {
+            width: 36px; height: 36px; border-radius: 10px; box-shadow: var(--neon);
+        }
+        nav a {
+            color: var(--text-muted); text-decoration: none; margin-left: 28px;
+            font-weight: 500; transition: color 0.2s;
+        }
+        nav a:hover { color: var(--accent); }
+        .hero { text-align: center; margin-bottom: 80px; max-width: 720px; }
+        .logo-main {
+            width: 180px; height: 180px; margin: 0 auto 32px;
+            border-radius: 40px;
+            box-shadow: 0 0 0 4px rgba(42, 171, 238, 0.3), 0 0 60px rgba(42, 171, 238, 0.4), 0 20px 40px rgba(0, 0, 0, 0.5);
+            animation: float 6s ease-in-out infinite;
+            background: linear-gradient(145deg, #1a2a3a, #0d1520);
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .logo-main img { width: 100%; height: 100%; object-fit: cover; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        h1 {
+            font-size: clamp(2.8rem, 8vw, 4.2rem); font-weight: 800; letter-spacing: -0.03em;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #fff 0%, #a0d8ff 50%, var(--accent) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            text-shadow: 0 0 40px rgba(42, 171, 238, 0.3);
+        }
+        .tagline {
+            font-size: 1.35rem; color: var(--text-muted); margin-bottom: 40px;
+            line-height: 1.5; font-weight: 400;
+        }
+        .tagline strong { color: var(--accent); font-weight: 600; }
+        .buttons {
+            display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-flex; align-items: center; gap: 12px;
+            padding: 16px 28px; border-radius: 14px; font-size: 1.05rem; font-weight: 600;
+            text-decoration: none; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none; cursor: pointer; position: relative; overflow: hidden;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, #1e90d0 100%);
+            color: #fff; box-shadow: 0 8px 24px rgba(42, 171, 238, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px); box-shadow: 0 12px 32px rgba(42, 171, 238, 0.55);
+        }
+        .btn-secondary {
+            background: var(--bg-card); color: var(--text); border: 1px solid rgba(42, 171, 238, 0.25);
+        }
+        .btn-secondary:hover {
+            background: #1e2a36; border-color: var(--accent); transform: translateY(-2px);
+        }
+        .btn-disabled {
+            background: #1a2430; color: #5a6a7a; border: 1px solid #2a3540;
+            cursor: not-allowed; position: relative;
+        }
+        .btn-disabled:hover::after {
+            content: "Скоро будет, брат 🔥";
+            position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%);
+            background: #1e2a36; color: var(--text-muted); padding: 8px 14px;
+            border-radius: 8px; font-size: 0.85rem; white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4); z-index: 10;
+        }
+        .btn svg { width: 22px; height: 22px; fill: currentColor; }
+        .features {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px; width: 100%; margin-bottom: 80px;
+        }
+        .feature-card {
+            background: var(--bg-card); border-radius: 20px; padding: 28px;
+            border: 1px solid rgba(42, 171, 238, 0.1); transition: all 0.3s;
+        }
+        .feature-card:hover {
+            border-color: rgba(42, 171, 238, 0.35); transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+        .feature-icon {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, rgba(42, 171, 238, 0.2), rgba(0, 194, 255, 0.1));
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            margin-bottom: 18px; font-size: 1.5rem;
+        }
+        .feature-card h3 { font-size: 1.2rem; margin-bottom: 10px; font-weight: 600; }
+        .feature-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        footer {
+            margin-top: auto; padding: 40px 0 20px; text-align: center;
+            color: var(--text-muted); font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.05); width: 100%;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 100;
+            align-items: center; justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--bg-card); border-radius: 20px; padding: 32px;
+            max-width: 400px; width: 90%; text-align: center;
+            border: 1px solid rgba(42, 171, 238, 0.2);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .modal-content h3 { margin-bottom: 12px; font-size: 1.4rem; }
+        .modal-content p { color: var(--text-muted); margin-bottom: 24px; }
+        .modal-content .btn { width: 100%; justify-content: center; }
+        @media (max-width: 600px) {
+            .logo-main { width: 140px; height: 140px; border-radius: 32px; }
+            h1 { font-size: 2.4rem; }
+            .buttons { flex-direction: column; width: 100%; }
+            .btn { width: 100%; justify-content: center; }
+            nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-particles"></div>
+    <div class="container">
+        <header>
+            <div class="logo-small">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAIAAAB7GkOtAAAQAElEQVR4Aey9B6BlWVUm/K21T7r3vlSvcld1zk13QxMEiQqoiIkx" alt="ForgeGram">
+                <span>ForgeGram</span>
+            </div>
+            <nav>
+                <a href="#features">Фичи</a>
+                <a href="#download">Скачать</a>
+            </nav>
+        </header>
+        <section class="hero" id="download">
+            <div class="logo-main">
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAIAAAB7GkOtAAAQAElEQVR4Aey9B6BlWVUm/K21T7r3vlSvcld1zk13QxMEiQqoiIkx" alt="ForgeGram Logo">
+            </div>
+            <h1>ForgeGram</h1>
+            <p class="tagline">
+                Мессенджер, который <strong>реально</strong> работает быстро.<br>
+                Копия Telegram — но с короной и характером.
+            </p>
+            <div class="buttons">
+                <a href="#" class="btn btn-primary" onclick="downloadApp('android'); return false;">
+                    <svg viewBox="0 0 24 24"><path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24a11.457 11.457 0 0 0-8.94 0L5.65 5.67c-.19-.29-.54-.38-.83-.22-.3.16-.42.54-.26.85L6.4 9.48A10.78 10.78 0 0 0 1 18h22a10.78 10.78 0 0 0-5.4-8.52zM7 15.25a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5zm10 0a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5z"/></svg>
+                    Скачать на телефон
+                </a>
+                <a href="#" class="btn btn-secondary" onclick="downloadApp('pc'); return false;">
+                    <svg viewBox="0 0 24 24"><path d="M4 6h16v10H4V6zm0-2c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h6v2H8v2h8v-2h-2v-2h6c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4z"/></svg>
+                    Скачать на ПК
+                </a>
+                <a href="#" class="btn btn-disabled" onclick="return false;">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    WEB-версия
+                </a>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">
+                Android • Windows • скоро macOS и iOS
+            </p>
+        </section>
+        <section class="features" id="features">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Молниеносно</h3>
+                <p>Сообщения летят быстрее, чем ты успеешь моргнуть. Оптимизация на стероидах.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Секретно</h3>
+                <p>Сквозное шифрование. Твои переписки — только твои. Никаких бэкдоров.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👑</div>
+                <h3>С короной</h3>
+                <p>Премиум-функции из коробки. Красивый дизайн, тёмная тема и куча кастомизации.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Без ограничений</h3>
+                <p>Каналы, группы, боты, стикеры, голосовые — всё как в Telegram, только круче.</p>
+            </div>
+        </section>
+        <footer>
+            <p>© 2026 ForgeGram. Не аффилирован с Telegram.</p>
+            <p style="margin-top: 8px;">Сделано с 🔥 • <a href="https://github.com/Floralss/ForgeGram" target="_blank">GitHub</a></p>
+        </footer>
+    </div>
+    <div class="modal" id="downloadModal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Скачивание</h3>
+            <p id="modalText">Файл готовится...</p>
+            <button class="btn btn-primary" onclick="closeModal()">Понял, жду</button>
+        </div>
+    </div>
+    <script>
+        function downloadApp(platform) {
+            const modal = document.getElementById('downloadModal');
+            const title = document.getElementById('modalTitle');
+            const text = document.getElementById('modalText');
+            if (platform === 'android') {
+                title.textContent = 'Android APK';
+                text.innerHTML = 'Скоро будет готово, брат 🔥<br>Файл ForgeGram.apk появится здесь.';
+                const blob = new Blob(['ForgeGram Android APK placeholder - coming soon!'], {type: 'application/octet-stream'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = 'ForgeGram.apk'; a.click();
+                URL.revokeObjectURL(url);
+            } else if (platform === 'pc') {
+                title.textContent = 'Windows Installer';
+                text.innerHTML = 'Скоро будет готово, брат 🔥<br>Файл ForgeGram-Setup.exe появится здесь.';
+                const blob = new Blob(['ForgeGram Desktop placeholder - coming soon!'], {type: 'application/octet-stream'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = 'ForgeGram-Setup.exe'; a.click();
+                URL.revokeObjectURL(url);
+            }
+            modal.classList.add('active');
+        }
+        function closeModal() {
+            document.getElementById('downloadModal').classList.remove('active');
+        }
+        document.getElementById('downloadModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+    </script>
+</body>
 </html>
